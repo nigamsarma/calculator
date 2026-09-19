@@ -2,6 +2,7 @@
  * Main Progressive Web App Controller & Router
  */
 
+import './styles/main.css';
 import { LocalStorageManager } from './db/storage.ts';
 import { SafetyService } from './services/safety.ts';
 import { CalculatorComponent } from './components/Calculator.ts';
