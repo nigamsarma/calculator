@@ -1,0 +1,418 @@
+/* Sleek Dark Mode Calculator & Disguised E2EE Chat Styling */
+
+:root {
+  --bg-primary: #121318;
+  --bg-secondary: #1a1c23;
+  --bg-tertiary: #252833;
+  --btn-num: #2d313f;
+  --btn-op: #3a3f52;
+  --btn-accent: #ff9500;
+  --btn-fn: #232733;
+  --text-main: #f0f2f5;
+  --text-muted: #8e95a5;
+  --text-accent: #00e699;
+  --border-color: #2e3342;
+  --chat-sent: #007aff;
+  --chat-received: #282c37;
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-main);
+  font-family: var(--font-family);
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   CALCULATOR UI
+   ========================================================================== */
+.calc-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+  padding: var(--safe-area-top) 12px var(--safe-area-bottom) 12px;
+  background-color: var(--bg-primary);
+}
+
+.calc-header {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+}
+
+.calc-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.calc-title.armed {
+  color: var(--text-muted); /* Keep exact same color when armed to avoid visual clue */
+}
+
+.calc-mode-indicator {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  background-color: var(--bg-tertiary);
+  color: var(--text-accent);
+  border-radius: 4px;
+}
+
+.calc-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 16px 12px;
+  background-color: var(--bg-secondary);
+  border-radius: 16px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.calc-history-line {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+  min-height: 24px;
+  word-break: break-all;
+  text-align: right;
+  opacity: 0.8;
+}
+
+.calc-current-line {
+  font-size: 2.6rem;
+  font-weight: 300;
+  color: var(--text-main);
+  word-break: break-all;
+  text-align: right;
+  line-height: 1.2;
+}
+
+/* Keypad Grid */
+.calc-keypad {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  padding-bottom: 12px;
+}
+
+.calc-btn {
+  aspect-ratio: 1.2;
+  border: none;
+  outline: none;
+  border-radius: 12px;
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: var(--text-main);
+  background-color: var(--btn-num);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: filter 0.1s ease, transform 0.05s ease;
+}
+
+.calc-btn:active {
+  filter: brightness(1.3);
+  transform: scale(0.96);
+}
+
+.calc-btn.btn-fn {
+  background-color: var(--btn-fn);
+  color: #7d889e;
+  font-size: 0.95rem;
+}
+
+.calc-btn.btn-op {
+  background-color: var(--btn-op);
+  color: #64b5f6;
+  font-size: 1.2rem;
+}
+
+.calc-btn.btn-accent {
+  background-color: var(--btn-accent);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.calc-btn.btn-sub {
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   UNLOCK PIN INITIAL MODAL
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+.modal-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 24px;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-main);
+  text-align: center;
+}
+
+.modal-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.4;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 12px 16px;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  color: var(--text-main);
+  font-size: 1.1rem;
+  text-align: center;
+  letter-spacing: 4px;
+  outline: none;
+}
+
+.modal-btn {
+  padding: 12px;
+  background-color: var(--chat-sent);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   ENCRYPTED CHAT UI
+   ========================================================================== */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+  background-color: var(--bg-primary);
+}
+
+.chat-header {
+  height: 56px;
+  padding: 0 16px;
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-header-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #ff3b30;
+}
+
+.chat-status-dot.online {
+  background-color: #34c759;
+}
+
+.chat-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  color: var(--text-main);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+}
+
+.icon-btn:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.msg-bubble {
+  max-width: 78%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+  position: relative;
+  word-break: break-word;
+}
+
+.msg-bubble.sent {
+  align-self: flex-end;
+  background-color: var(--chat-sent);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+}
+
+.msg-bubble.received {
+  align-self: flex-start;
+  background-color: var(--chat-received);
+  color: var(--text-main);
+  border-bottom-left-radius: 4px;
+}
+
+.msg-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 0.7rem;
+  opacity: 0.75;
+  margin-top: 4px;
+}
+
+.msg-img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 4px;
+  cursor: pointer;
+}
+
+.typing-indicator {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 4px 16px;
+  font-style: italic;
+}
+
+/* Chat Input Bar */
+.chat-input-bar {
+  padding: 12px 16px;
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.chat-input {
+  flex: 1;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 10px 16px;
+  color: var(--text-main);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+/* ==========================================================================
+   APP SWITCHER PRIVACY COVER
+   ========================================================================== */
+.privacy-cover {
+  position: fixed;
+  inset: 0;
+  background-color: var(--bg-primary);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.privacy-cover.hidden {
+  display: none;
+}
+
+.privacy-calculator-mock {
+  width: 90%;
+  max-width: 380px;
+  background-color: var(--bg-secondary);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mock-header {
+  font-weight: 600;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.mock-display {
+  font-size: 2.5rem;
+  text-align: right;
+  color: var(--text-main);
+}

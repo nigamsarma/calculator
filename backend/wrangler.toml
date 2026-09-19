@@ -1,0 +1,17 @@
+name = "calculator-chat-backend"
+main = "src/index.ts"
+compatibility_date = "2024-09-01"
+
+[durable_objects]
+bindings = [
+  { name = "CHAT_ROOM", class_name = "DurableChatRoom" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["DurableChatRoom"]
+
+[vars]
+GOOGLE_CLIENT_ID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+ALLOWED_ORIGINS = "https://calculator.pages.dev,http://localhost:5173"
+VAPID_SUBJECT = "mailto:admin@calculator-app.com"

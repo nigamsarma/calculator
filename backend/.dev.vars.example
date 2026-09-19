@@ -1,0 +1,7 @@
+# Local Development Environment Variables for Cloudflare Worker
+JWT_SECRET="your-super-secret-jwt-signing-key-minimum-32-chars"
+GOOGLE_CLIENT_ID="1234567890-example.apps.googleusercontent.com"
+ALLOWED_ORIGINS="http://localhost:5173,https://calculator.pages.dev"
+VAPID_PUBLIC_KEY="BEl62iUYgUivxIkv69yViEuiBIa-..."
+VAPID_PRIVATE_KEY="your-vapid-private-key"
+VAPID_SUBJECT="mailto:admin@calculator.app"
