@@ -52,15 +52,18 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
-  max-width: 480px;
+  max-width: 440px;
+  max-height: 100dvh;
   margin: 0 auto;
   width: 100%;
   padding: var(--safe-area-top) 12px var(--safe-area-bottom) 12px;
   background-color: var(--bg-primary);
+  overflow: hidden;
 }
 
 .calc-header {
-  height: 48px;
+  height: 40px;
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -89,30 +92,31 @@ body {
 }
 
 .calc-display {
-  flex: 1;
+  flex: 0 0 auto;
+  min-height: 80px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
-  padding: 16px 12px;
+  padding: 12px;
   background-color: var(--bg-secondary);
   border-radius: 16px;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   overflow: hidden;
   border: 1px solid var(--border-color);
 }
 
 .calc-history-line {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-muted);
-  min-height: 24px;
+  min-height: 20px;
   word-break: break-all;
   text-align: right;
   opacity: 0.8;
 }
 
 .calc-current-line {
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   font-weight: 300;
   color: var(--text-main);
   word-break: break-all;
@@ -122,18 +126,20 @@ body {
 
 /* Keypad Grid */
 .calc-keypad {
+  flex: 1;
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  padding-bottom: 12px;
+  grid-template-rows: repeat(9, 1fr);
+  gap: 6px;
+  padding-bottom: 8px;
+  min-height: 0;
 }
 
 .calc-btn {
-  aspect-ratio: 1.2;
   border: none;
   outline: none;
-  border-radius: 12px;
-  font-size: 1.15rem;
+  border-radius: 10px;
+  font-size: 1.1rem;
   font-weight: 500;
   color: var(--text-main);
   background-color: var(--btn-num);
@@ -141,6 +147,8 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  height: 100%;
+  width: 100%;
   transition: filter 0.1s ease, transform 0.05s ease;
 }
 
@@ -152,25 +160,26 @@ body {
 .calc-btn.btn-fn {
   background-color: var(--btn-fn);
   color: #7d889e;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
 }
 
 .calc-btn.btn-op {
   background-color: var(--btn-op);
   color: #64b5f6;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .calc-btn.btn-accent {
   background-color: var(--btn-accent);
   color: #ffffff;
   font-weight: 600;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
 }
 
 .calc-btn.btn-sub {
   font-size: 0.85rem;
 }
+
 
 /* ==========================================================================
    UNLOCK PIN INITIAL MODAL
