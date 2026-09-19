@@ -3,6 +3,9 @@
  */
 
 import { verifyGoogleIdToken, createSessionToken, verifySessionToken } from './auth.ts';
+import { DurableChatRoom } from './DurableChatRoom.ts';
+
+export { DurableChatRoom };
 
 export interface Env {
   CHAT_ROOM: DurableObjectNamespace;
