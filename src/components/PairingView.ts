@@ -90,39 +90,27 @@ export class PairingViewComponent {
 
     let createdRoomId = '';
 
-    btnGen.addEventListener('click', async () => {
-      let roomId = '';
-      let inviteKey = '';
-
-      try {
-        const res = await fetch(`${this.backendUrl}/api/pairing/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${this.token}`
-          }
-        });
-        if (res.ok) {
-          const data = await res.json();
-          if (data.roomId) {
-            roomId = data.roomId;
-            inviteKey = data.inviteKey;
-          }
-        }
-      } catch (e) {
-        // Fallback to instant client-side crypto generation
-      }
-
-      if (!roomId) {
-        roomId = this.generateRandomCode(8).toUpperCase();
-        inviteKey = this.generateRandomCode(16);
-      }
+    btnGen.addEventListener('click', () => {
+      // Synchronous instant generation (zero network delay)
+      const roomId = this.generateRandomCode(8).toUpperCase();
+      const inviteKey = this.generateRandomCode(16);
 
       createdRoomId = roomId;
       resRoomId.textContent = roomId;
       resInviteKey.textContent = inviteKey;
+
+      // Reveal result UI immediately
       resDiv.style.display = 'block';
       btnGen.style.display = 'none';
+
+      // Background API sync if server available
+      fetch(`${this.backendUrl}/api/pairing/create`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.token}`
+        }
+      }).catch(() => {});
     });
 
     btnStart.addEventListener('click', () => {
@@ -137,7 +125,7 @@ export class PairingViewComponent {
     const btnJoinSubmit = this.container.querySelector('#btn-join-submit') as HTMLButtonElement;
     const joinErr = this.container.querySelector('#join-error') as HTMLElement;
 
-    btnJoinSubmit.addEventListener('click', async () => {
+    btnJoinSubmit.addEventListener('click', () => {
       const roomId = joinRoomIdInput.value.trim().toUpperCase();
 
       if (!roomId) {
