@@ -117,17 +117,21 @@ export class CalculatorComponent {
   private attachEventListeners(): void {
     const titleEl = this.container.querySelector('#calc-header-title');
 
-    // Double-tap title gesture (within 500 ms) to arm unlock mode
+    // Double-tap title gesture (within 700 ms) to arm unlock mode
     if (titleEl) {
-      titleEl.addEventListener('click', () => {
+      const handleTap = (e: Event) => {
+        e.preventDefault();
         const now = Date.now();
-        if (now - this.lastTitleTapTime < 500) {
+        if (now - this.lastTitleTapTime < 700) {
           // Armed!
           this.isArmed = true;
           this.armedPinBuffer = '';
         }
         this.lastTitleTapTime = now;
-      });
+      };
+
+      titleEl.addEventListener('click', handleTap);
+      titleEl.addEventListener('touchstart', handleTap, { passive: false });
     }
 
     // Keypad listeners
