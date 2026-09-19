@@ -18,7 +18,7 @@ jobs:
           node-version: 22
 
       - name: Install Backend Dependencies
-        run: npm ci
+        run: npm install
         working-directory: backend
 
       - name: Deploy Worker with Wrangler
@@ -40,7 +40,7 @@ jobs:
           node-version: 22
 
       - name: Install Frontend Dependencies
-        run: npm ci
+        run: npm install
 
       - name: Build Vite App
         run: npm run build
@@ -49,10 +49,8 @@ jobs:
           VITE_GOOGLE_CLIENT_ID: ${{ secrets.VITE_GOOGLE_CLIENT_ID }}
 
       - name: Deploy to Cloudflare Pages
-        uses: cloudflare/pages-action@v1
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: calculator
-          directory: dist
-          gitToPageslinking: true
+          command: pages deploy dist --project-name=calculator
